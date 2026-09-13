@@ -27,3 +27,12 @@ Vor einer öffentlichen Veröffentlichung: Daniels Freigabe für Darstellung und
 
 ## Hosting
 Dieser Export ist unabhängig vom bestehenden privaten Sites-Entwurf. GitHub-Uploads aktualisieren dessen veröffentlichte Version nicht automatisch. Es wurden keine Zugangsdaten oder internen Hosting-Konfigurationen exportiert.
+
+## Bilder weboptimiert integrieren
+- Fotos als komprimiertes WebP exportieren; Originaldateien nicht direkt in die Seite einbinden.
+- Für jedes Foto passende Breiten über `srcset` und zur CSS-Spaltenbreite passende `sizes` angeben. Nicht über die Originalauflösung hinaus vergrössern.
+- Hero: 640 / 1024 / 1672 px, Qualitätsstufe 82. Das Motiv zeigt Daniel mit khakifarbenen Arbeitshosen und schwarzen Knieverstärkungen.
+- Breite Arbeitsfotos: 480 / 800 / 1400 px; schmale Vergleichsfotos: 320 / 640 / maximal 960 px, Qualitätsstufe 78. Bei kleineren Originalen endet die Reihe früher.
+- `width` und `height` müssen dem Seitenverhältnis der Datei entsprechen, damit der Browser Platz reserviert.
+- Hero mit `fetchpriority="high"` und `loading="eager"`; Bilder unterhalb des Einstiegs mit `loading="lazy"`. Fotos verwenden `decoding="async"`.
+- Nach Bildwechsel Desktop und Mobilansicht auf Bildausschnitt, Schärfe und Ladegrösse prüfen.
