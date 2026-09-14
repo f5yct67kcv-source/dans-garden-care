@@ -8,19 +8,12 @@ document.querySelector('#year').textContent=new Date().getFullYear();
 
 /* Photo-quote request
    ---------------------------------------------------------------
-   This site has no server, so submissions go through a free
-   form-to-email service that accepts file uploads (Web3Forms).
-   To switch it on:
-     1. Go to https://web3forms.com, enter Dan's email, and copy
-        the Access Key it sends you (no account/login needed).
-     2. Paste that key below, replacing the PASTE_... placeholder.
-   Until a real key is in place, the form tells the customer to
-   call or email Dan directly instead of failing silently.
-   If you'd rather use a different provider (e.g. Formspree), swap
-   QUOTE_ENDPOINT and the field names in the submit handler below
-   to match that provider's docs. */
-const QUOTE_ENDPOINT = 'https://api.web3forms.com/submit';
-const QUOTE_ACCESS_KEY = 'PASTE_WEB3FORMS_ACCESS_KEY_HERE';
+   Submissions go to send-quote.php, a small self-hosted script that
+   lives next to this file on Dan's own Hostpoint hosting and emails
+   the request straight to him — no third-party form service involved.
+   See README.md ("Offerte-Formular einrichten") for the one-time
+   setup step (Dan's email address) and how to test it after upload. */
+const QUOTE_ENDPOINT = 'send-quote.php';
 
 const quoteDialog = document.querySelector('#quote-dialog');
 const quoteForm = document.querySelector('#quote-form');
@@ -115,29 +108,21 @@ quoteForm.addEventListener('submit', async e => {
   e.preventDefault();
   if (quoteForm.botcheck.value) return; // honeypot tripped — say nothing, do nothing
 
-  if (QUOTE_ACCESS_KEY.startsWith('PASTE_')) {
-    quoteStatus.textContent = 'This form isn’t switched on yet — please call or email Dan directly.';
-    quoteStatus.className = 'quote-status error';
-    return;
-  }
-
   quoteSubmit.disabled = true;
   quoteSubmit.textContent = 'Sending…';
   quoteStatus.textContent = '';
   quoteStatus.className = 'quote-status';
 
   const data = new FormData();
-  data.append('access_key', QUOTE_ACCESS_KEY);
-  data.append('subject', 'New quote request — Dan’s Garden Care website');
   data.append('name', quoteForm.name.value.trim());
   data.append('contact', quoteForm.contact.value.trim());
   data.append('location', quoteForm.location.value.trim());
   data.append('message', quoteForm.message.value.trim());
-  selectedPhotos.forEach(entry => data.append('attachment', entry.file, entry.file.name));
+  selectedPhotos.forEach(entry => data.append('attachment[]', entry.file, entry.file.name));
 
   try {
     const res = await fetch(QUOTE_ENDPOINT, { method: 'POST', body: data });
-    const result = await res.json().catch(() => ({ success: res.ok }));
+    const result = await res.json().catch(() => ({ success: false }));
     if (!res.ok || result.success === false) throw new Error('submit failed');
 
     quoteForm.reset();
