@@ -21,8 +21,20 @@ Für klassisches Webhosting index.html, style.css, main.js und assets gemeinsam 
 
 ## Entwurfsstand
 Farben: Grün #14452F, Terrakotta #B5401E, Creme #F5F2E9.
-Das Hero-Bild ist KI-generiert und im Entwurf entsprechend bezeichnet. Die Projektvergleiche verwenden Daniels echte Arbeitsfotos. Logo und Bilder sind enthalten.
-Kontaktlinks öffnen Telefon bzw. E-Mail; es gibt kein serverseitiges Kontaktformular.
+Das Hero-Bild zeigt Dan bei der Gartenarbeit. Die Projektvergleiche verwenden Daniels echte Arbeitsfotos. Logo und Bilder sind enthalten.
+Kontaktlinks öffnen Telefon bzw. E-Mail. Zusätzlich gibt es ein Offerte-Formular mit Foto-Upload (siehe unten) – ein klassisches serverseitiges Kontaktformular gibt es weiterhin nicht, da die Seite statisch bleibt.
+
+## Offerte-Formular einrichten
+Der Button „Get a quote with photos“ (im Hero und im Kontaktbereich) öffnet ein Formular, in dem Interessenten Name, Kontakt, Standort, eine kurze Beschreibung und bis zu 3 Gartenfotos direkt aus dem Browser senden können. Fotos werden vor dem Versand im Browser verkleinert (lange Kante max. 1600 px, JPEG), damit auch auf mobilen Daten schnell gesendet wird.
+
+Da die Seite keinen eigenen Server hat, läuft der Versand über den kostenlosen Formular-Dienst Web3Forms, der Datei-Uploads unterstützt:
+1. Auf https://web3forms.com die E-Mail-Adresse eingeben, an die Anfragen gehen sollen (z. B. Daniels E-Mail). Kein Account/Login nötig.
+2. Den per E-Mail zugestellten Access Key kopieren.
+3. In `main.js` die Zeile `const QUOTE_ACCESS_KEY = 'PASTE_WEB3FORMS_ACCESS_KEY_HERE';` durch den echten Key ersetzen.
+
+Bis der Key eingetragen ist, zeigt das Formular beim Absenden freundlich „This form isn't switched on yet – please call or email Dan directly.“ an, anstatt fehlzuschlagen. Wer lieber einen anderen Dienst nutzt (z. B. Formspree), passt `QUOTE_ENDPOINT` und die Feldnamen im `submit`-Handler in `main.js` entsprechend an.
+
+Vor dem Go-Live prüfen: Empfangsadresse testen (Testanfrage mit Foto senden), Formularlimits des gewählten Dienstes (Anzahl Anfragen/Monat, Dateigrösse) und ob ein Hinweis zur Datenverwendung der Fotos rechtlich ergänzt werden muss.
 Vor einer öffentlichen Veröffentlichung: Daniels Freigabe für Darstellung und Arbeitskleidung, Bildnutzung und Vorher-nachher-Zuordnung einholen; Leistungsangaben und Kontakt prüfen; rechtliche Angaben prüfen/ergänzen. Der Entwurf enthält absichtlich noindex,nofollow — erst für die finale öffentliche Seite entfernen.
 
 ## Hosting
